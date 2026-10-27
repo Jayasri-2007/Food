@@ -1,0 +1,873 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoodTime - Food Delivery</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f8f4;
+    color: #252525;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+}
+button:hover { opacity: 0.85; }
+
+input, textarea, select {
+    width: 100%;
+    padding: 11px;
+    margin: 8px 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+}
+
+label { font-weight: bold; font-size: 14px; }
+.hidden { display: none !important; }
+
+.green-btn, .add-btn {
+    background: #238636;
+    color: white;
+}
+
+.orange-btn { background: #ff914d; color: white; }
+
+#loginPage {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #e7f6e9, #fff0dc);
+}
+
+.login-box {
+    background: white;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px #0002;
+}
+
+.login-box h1, .logo {
+    text-align: center;
+    color: #238636;
+    margin-bottom: 15px;
+}
+
+.logo { font-size: 40px; }
+
+header {
+    background: white;
+    padding: 16px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px #0001;
+}
+
+.brand {
+    color: #238636;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+nav { display: flex; gap: 7px; flex-wrap: wrap; }
+nav button { background: transparent; }
+.cart-button { background: #238636; color: white; }
+.logout-button { color: #d93025; }
+
+.hero {
+    width: 90%;
+    margin: 25px auto;
+    padding: 45px 30px;
+    min-height: 230px;
+    border-radius: 15px;
+    color: white;
+    background:
+        linear-gradient(90deg, #123522e8, #12352255),
+        url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200")
+        center/cover;
+}
+
+.hero h1 {
+    font-size: clamp(28px, 5vw, 45px);
+    margin: 20px 0;
+}
+
+.hero p { margin-bottom: 20px; }
+
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding-bottom: 30px;
+}
+
+.section-heading { margin: 30px 0 20px; }
+
+.search { max-width: 450px; }
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.food-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px #0001;
+}
+
+.food-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    background: #e8f5e9;
+    display: block;
+}
+
+.food-info { padding: 15px; }
+.food-info h3 { margin-bottom: 8px; }
+
+.food-info p {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.food-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.price {
+    color: #238636;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.panel {
+    background: white;
+    padding: 22px;
+    margin: 30px 0;
+    border-radius: 12px;
+    scroll-margin-top: 100px;
+}
+
+.panel h2 { margin-bottom: 20px; }
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quantity button {
+    background: #e8f5e9;
+    color: #238636;
+}
+
+.remove-btn { background: #ffebeb; color: #c62828; }
+
+.bill {
+    max-width: 400px;
+    margin: 20px 0 0 auto;
+}
+
+.bill-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0;
+}
+
+.grand-total {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.full-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 13px;
+}
+
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.checkout-grid h3 { margin: 10px 0 20px; }
+
+#successPage {
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 20px #0001;
+}
+
+#successPage h2 {
+    color: #238636;
+    margin: 15px 0;
+}
+
+#successPage p {
+    margin: 12px 0;
+    overflow-wrap: anywhere;
+}
+
+footer {
+    background: #173c24;
+    color: white;
+    text-align: center;
+    padding: 22px;
+    line-height: 1.8;
+}
+
+#toast {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #176b2c;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    z-index: 20;
+    max-width: 90%;
+}
+
+@media (max-width: 800px) {
+    .food-grid { grid-template-columns: repeat(2, 1fr); }
+    .checkout-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+    .food-grid { grid-template-columns: 1fr; }
+    header, nav { justify-content: center; }
+    .hero { padding: 25px 18px; }
+    .panel { padding: 16px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN PAGE -->
+<section id="loginPage">
+    <div class="login-box">
+        <div class="logo">🍽️</div>
+        <h1>FoodTime</h1>
+        <p style="text-align:center;margin-bottom:20px">
+            Delicious traditional millet meals!
+        </p>
+
+        <form id="loginForm">
+            <label for="username">Username</label>
+            <input id="username" placeholder="Enter username" required>
+
+            <label for="password">Password</label>
+            <input id="password" type="password"
+                   placeholder="Enter password" required>
+
+            <button class="green-btn full-btn" type="submit">Login</button>
+            <p id="loginError" style="color:red;margin-top:10px"></p>
+        </form>
+
+    </div>
+</section>
+
+<!-- FOOD DELIVERY APP -->
+<div id="app" class="hidden">
+
+    <header>
+        <div class="brand">🍽️ FoodTime</div>
+        <nav>
+            <button onclick="goHome()">Home</button>
+            <button onclick="scrollToId('menu')">Menu</button>
+            <button class="cart-button" onclick="scrollToId('cart')">
+                🛒 Cart (<span id="cartCount">0</span>)
+            </button>
+            <button class="logout-button" onclick="logout()">Logout</button>
+        </nav>
+    </header>
+
+    <div id="menuPage">
+        <section class="hero">
+            <h1>Good Food, Great Health!</h1>
+            <p>Enjoy healthy and traditional millet foods.</p>
+            <button class="orange-btn" onclick="scrollToId('menu')">
+                Explore Menu
+            </button>
+        </section>
+
+        <main>
+            <h2 class="section-heading" id="menu">
+                🌾 Traditional Foods Menu
+            </h2>
+
+            <input class="search" id="search" type="search"
+                   placeholder="🔍 Search foods..."
+                   oninput="filterFoods()">
+
+            <div class="food-grid">
+
+                <!-- KAMBU KOOZH -->
+                <article class="food-card" data-name="kambu koozh">
+                    <img src="C:\Users\jaysh\OneDrive\Pictures\kambu koozh.webp"
+                         alt="Kambu Koozh"
+                         onerror="imageFallback(this,'Kambu Koozh')">
+                    <div class="food-info">
+                        <h3>Kambu Koozh</h3>
+                        <p>Traditional pearl millet drink.</p>
+                        <div class="food-bottom">
+                            <span class="price">₹50</span>
+                            <button class="add-btn" onclick="addToCart(1)">Add +</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- KELVARAGU COOKIES -->
+                <article class="food-card" data-name="kelvaragu cookies">
+                    <img src="C:\Users\jaysh\OneDrive\Pictures\kelvaragu cookies.jpg"
+                         alt="Kelvaragu Cookies"
+                         onerror="imageFallback(this,'Kelvaragu Cookies')">
+                    <div class="food-info">
+                        <h3>Kelvaragu Cookies</h3>
+                        <p>Homemade ragi cookies.</p>
+                        <div class="food-bottom">
+                            <span class="price">₹80</span>
+                            <button class="add-btn" onclick="addToCart(2)">Add +</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- KELVARAGU ROTTI -->
+                <article class="food-card" data-name="kelvaragu rotti">
+                    <img src="C:\Users\jaysh\OneDrive\Pictures\kelvaragu rotti.jpg"
+                         alt="Kelvaragu Rotti"
+                         onerror="imageFallback(this,'Kelvaragu Rotti')">
+                    <div class="food-info">
+                        <h3>Kelvaragu Rotti</h3>
+                        <p>Traditional finger millet rotti.</p>
+                        <div class="food-bottom">
+                            <span class="price">₹50</span>
+                            <button class="add-btn" onclick="addToCart(3)">Add +</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PUTTU -->
+                <article class="food-card" data-name="puttu">
+                    <img src="C:\Users\jaysh\OneDrive\Pictures\puttu.jpg"
+                         alt="Puttu"
+                         onerror="imageFallback(this,'Puttu')">
+                    <div class="food-info">
+                        <h3>Puttu</h3>
+                        <p>Fresh traditional steamed puttu.</p>
+                        <div class="food-bottom">
+                            <span class="price">₹45</span>
+                            <button class="add-btn" onclick="addToCart(4)">Add +</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- RAGI DOSA -->
+                <article class="food-card" data-name="ragi dosa">
+                    <img src="C:\Users\jaysh\OneDrive\Pictures\ragi dosa.jpg"
+                         alt="Ragi Dosa"
+                         onerror="imageFallback(this,'Ragi Dosa')">
+                    <div class="food-info">
+                        <h3>Ragi Dosa</h3>
+                        <p>Crispy ragi dosa with chutney.</p>
+                        <div class="food-bottom">
+                            <span class="price">₹60</span>
+                            <button class="add-btn" onclick="addToCart(5)">Add +</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- RAGI MALT -->
+                <article class="food-card" data-name="ragi malt">
+                    <img src="C:\Users\jaysh\OneDrive\Pictures\ragi malt.jpg"
+                         alt="Ragi Malt"
+                         onerror="imageFallback(this,'Ragi Malt')">
+                    <div class="food-info">
+                        <h3>Ragi Malt</h3>
+                        <p>Healthy traditional ragi drink.</p>
+                        <div class="food-bottom">
+                            <span class="price">₹35</span>
+                            <button class="add-btn" onclick="addToCart(6)">Add +</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- RAVA IDLI -->
+                <article class="food-card" data-name="rava idli">
+                    <img src="C:\Users\jaysh\OneDrive\Pictures\rava idli.jpg"
+                         alt="Rava Idli"
+                         onerror="imageFallback(this,'Rava Idli')">
+                    <div class="food-info">
+                        <h3>Rava Idli</h3>
+                        <p>Soft idli served with chutney.</p>
+                        <div class="food-bottom">
+                            <span class="price">₹40</span>
+                            <button class="add-btn" onclick="addToCart(7)">Add +</button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- THINAI PONGAL -->
+                <article class="food-card" data-name="thinai pongal">
+                    <img src="C:\Users\jaysh\OneDrive\Pictures\thinai pongal.jpg"
+                         alt="Thinai Pongal"
+                         onerror="imageFallback(this,'Thinai Pongal')">
+                    <div class="food-info">
+                        <h3>Thinai Pongal</h3>
+                        <p>Traditional foxtail millet pongal.</p>
+                        <div class="food-bottom">
+                            <span class="price">₹90</span>
+                            <button class="add-btn" onclick="addToCart(8)">Add +</button>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- CART -->
+            <section class="panel" id="cart">
+                <h2>🛒 Your Cart</h2>
+                <div id="cartItems"></div>
+
+                <div class="bill">
+                    <div class="bill-row">
+                        <span>Subtotal</span>
+                        <span id="subtotal">₹0</span>
+                    </div>
+                    <div class="bill-row">
+                        <span>Delivery Charge</span>
+                        <span id="delivery">₹0</span>
+                    </div>
+                    <div class="bill-row grand-total">
+                        <span>Total</span>
+                        <span id="total">₹0</span>
+                    </div>
+                </div>
+
+                <button class="green-btn full-btn" onclick="checkout()">
+                    Proceed to Checkout →
+                </button>
+            </section>
+
+            <!-- CHECKOUT -->
+            <section class="panel hidden" id="checkoutPanel">
+                <h2>📍 Delivery Details</h2>
+
+                <form id="checkoutForm">
+                    <div class="checkout-grid">
+                        <div>
+                            <h3>Customer Information</h3>
+
+                            <label for="customerName">Full Name</label>
+                            <input id="customerName" required
+                                   placeholder="Enter your name">
+
+                            <label for="phone">Mobile Number</label>
+                            <input id="phone" type="tel" inputmode="numeric"
+                                   pattern="[0-9]{10}" maxlength="10"
+                                   placeholder="10-digit mobile number" required>
+
+                            <label for="address">Full Address</label>
+                            <textarea id="address" rows="3"
+                                      placeholder="House number, street..."
+                                      required></textarea>
+
+                            <label for="city">City / Town</label>
+                            <input id="city" required placeholder="Enter city">
+
+                            <label for="pincode">PIN Code</label>
+                            <input id="pincode" inputmode="numeric"
+                                   pattern="[0-9]{6}" maxlength="6"
+                                   placeholder="6-digit PIN code" required>
+                        </div>
+
+                        <div>
+                            <h3>Payment Method</h3>
+
+                            <label for="payment">Select Payment</label>
+                            <select id="payment" required>
+                                <option value="">Choose payment method</option>
+                                <option value="Cash on Delivery">Cash on Delivery</option>
+                                <option value="UPI Demo">UPI (Demo)</option>
+                                <option value="Card Demo">Card (Demo)</option>
+                            </select>
+
+                            <p style="color:#777;font-size:14px;line-height:1.6">
+                                UPI and Card are demo options. No actual payment
+                                will be processed.
+                            </p>
+
+                            <div class="bill">
+                                <div class="bill-row">
+                                    <span>Subtotal</span>
+                                    <span id="checkoutSubtotal">₹0</span>
+                                </div>
+                                <div class="bill-row">
+                                    <span>Delivery</span>
+                                    <span id="checkoutDelivery">₹0</span>
+                                </div>
+                                <div class="bill-row grand-total">
+                                    <span>Total</span>
+                                    <span id="checkoutTotal">₹0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="green-btn full-btn" type="submit">
+                        Place Order ✓
+                    </button>
+                    <button class="full-btn" type="button"
+                            style="background:#eee" onclick="backToCart()">
+                        Back to Cart
+                    </button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- ORDER SUCCESS -->
+    <section id="successPage" class="hidden">
+        <div style="font-size:55px">✅</div>
+        <h2>Order Placed Successfully!</h2>
+        <p>Thank you for ordering with FoodTime.</p>
+        <p><b>Order ID:</b> <span id="orderId"></span></p>
+        <p><b>Customer:</b> <span id="successName"></span></p>
+        <p><b>Address:</b> <span id="successAddress"></span></p>
+        <p><b>Payment:</b> <span id="successPayment"></span></p>
+        <p><b>Total:</b> <span id="successTotal"></span></p>
+        <button class="green-btn full-btn" onclick="newOrder()">
+            Order More Food 🍽️
+        </button>
+    </section>
+
+    <footer>
+        <p>🍽️ FoodTime — Good Food, Good Mood!</p>
+        <p>Traditional Taste. Fresh Food. Happy Customers.</p>
+    </footer>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const foods = [
+    { id: 1, name: "Kambu Koozh", price: 50 },
+    { id: 2, name: "Kelvaragu Cookies", price: 80 },
+    { id: 3, name: "Kelvaragu Rotti", price: 50 },
+    { id: 4, name: "Puttu", price: 45 },
+    { id: 5, name: "Ragi Dosa", price: 60 },
+    { id: 6, name: "Ragi Malt", price: 35 },
+    { id: 7, name: "Rava Idli", price: 40 },
+    { id: 8, name: "Thinai Pongal", price: 90 }
+];
+
+let cart = [];
+let toastTimer;
+
+function imageFallback(img, name) {
+    img.onerror = null;
+    img.src = "https://placehold.co/600x400/e8f5e9/238636?text="
+        + encodeURIComponent(name);
+}
+
+// LOGIN
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (username === "foodie" && password === "12345") {
+        document.getElementById("loginPage").classList.add("hidden");
+        document.getElementById("app").classList.remove("hidden");
+        updateCart();
+        showToast("Welcome to FoodTime!");
+    } else {
+        document.getElementById("loginError").textContent =
+            "Invalid username or password.";
+    }
+});
+
+// ADD FOOD TO CART
+function addToCart(id) {
+    const food = foods.find(item => item.id === id);
+    if (!food) return;
+
+    const item = cart.find(item => item.id === id);
+
+    if (item) {
+        item.qty++;
+    } else {
+        cart.push({ ...food, qty: 1 });
+    }
+
+    updateCart();
+    showToast(food.name + " added to cart!");
+}
+
+// CHANGE QUANTITY
+function changeQty(id, amount) {
+    const item = cart.find(item => item.id === id);
+    if (!item) return;
+
+    item.qty += amount;
+
+    if (item.qty <= 0) {
+        cart = cart.filter(item => item.id !== id);
+    }
+
+    updateCart();
+}
+
+// REMOVE ITEM
+function removeItem(id) {
+    cart = cart.filter(item => item.id !== id);
+    updateCart();
+    showToast("Food removed from cart.");
+}
+
+// BILL CALCULATION
+function subtotal() {
+    return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+}
+
+function deliveryCharge() {
+    return cart.length > 0 ? 30 : 0;
+}
+
+function totalAmount() {
+    return subtotal() + deliveryCharge();
+}
+
+function money(amount) {
+    return "₹" + amount.toLocaleString("en-IN");
+}
+
+// DISPLAY CART
+function updateCart() {
+    const container = document.getElementById("cartItems");
+    container.replaceChildren();
+
+    if (cart.length === 0) {
+        container.textContent = "Your cart is empty. Add some food!";
+    }
+
+    cart.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "cart-item";
+
+        const info = document.createElement("div");
+        const title = document.createElement("h3");
+        const price = document.createElement("p");
+
+        title.textContent = item.name;
+        price.textContent = money(item.price) + " each";
+        info.append(title, price);
+
+        const controls = document.createElement("div");
+        controls.className = "quantity";
+
+        const minus = document.createElement("button");
+        minus.textContent = "−";
+        minus.onclick = () => changeQty(item.id, -1);
+
+        const quantity = document.createElement("span");
+        quantity.textContent = item.qty;
+
+        const plus = document.createElement("button");
+        plus.textContent = "+";
+        plus.onclick = () => changeQty(item.id, 1);
+
+        const remove = document.createElement("button");
+        remove.textContent = "Remove";
+        remove.className = "remove-btn";
+        remove.onclick = () => removeItem(item.id);
+
+        controls.append(minus, quantity, plus, remove);
+
+        const lineTotal = document.createElement("b");
+        lineTotal.textContent = money(item.price * item.qty);
+
+        row.append(info, controls, lineTotal);
+        container.appendChild(row);
+    });
+
+    document.getElementById("cartCount").textContent =
+        cart.reduce((sum, item) => sum + item.qty, 0);
+
+    document.getElementById("subtotal").textContent = money(subtotal());
+    document.getElementById("delivery").textContent = money(deliveryCharge());
+    document.getElementById("total").textContent = money(totalAmount());
+
+    document.getElementById("checkoutSubtotal").textContent = money(subtotal());
+    document.getElementById("checkoutDelivery").textContent = money(deliveryCharge());
+    document.getElementById("checkoutTotal").textContent = money(totalAmount());
+}
+
+// CHECKOUT
+function checkout() {
+    if (cart.length === 0) {
+        showToast("Please add food to your cart first.");
+        return;
+    }
+
+    document.getElementById("checkoutPanel").classList.remove("hidden");
+    updateCart();
+    scrollToId("checkoutPanel");
+}
+
+function backToCart() {
+    document.getElementById("checkoutPanel").classList.add("hidden");
+    scrollToId("cart");
+}
+
+// PLACE ORDER
+document.getElementById("checkoutForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    if (cart.length === 0) {
+        showToast("Your cart is empty.");
+        return;
+    }
+
+    const name = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const city = document.getElementById("city").value.trim();
+    const pin = document.getElementById("pincode").value.trim();
+    const payment = document.getElementById("payment").value;
+
+    if (!name || !address || !city || !payment ||
+        !/^[0-9]{10}$/.test(phone) || !/^[0-9]{6}$/.test(pin)) {
+        showToast("Please enter valid delivery details.");
+        return;
+    }
+
+    document.getElementById("orderId").textContent =
+        "FT" + Date.now().toString().slice(-8);
+    document.getElementById("successName").textContent = name;
+    document.getElementById("successAddress").textContent =
+        address + ", " + city + " - " + pin;
+    document.getElementById("successPayment").textContent = payment;
+    document.getElementById("successTotal").textContent = money(totalAmount());
+
+    document.getElementById("menuPage").classList.add("hidden");
+    document.getElementById("successPage").classList.remove("hidden");
+
+    cart = [];
+    updateCart();
+    document.getElementById("checkoutForm").reset();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    showToast("Order placed successfully!");
+});
+
+// ORDER MORE
+function newOrder() {
+    document.getElementById("successPage").classList.add("hidden");
+    document.getElementById("menuPage").classList.remove("hidden");
+    document.getElementById("checkoutPanel").classList.add("hidden");
+    document.getElementById("search").value = "";
+    filterFoods();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// SEARCH FOODS
+function filterFoods() {
+    const query = document.getElementById("search").value.toLowerCase().trim();
+
+    document.querySelectorAll(".food-card").forEach(card => {
+        card.style.display = card.dataset.name.includes(query) ? "" : "none";
+    });
+}
+
+// NAVIGATION
+function scrollToId(id) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+}
+
+function goHome() {
+    document.getElementById("menuPage").classList.remove("hidden");
+    document.getElementById("successPage").classList.add("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// LOGOUT
+function logout() {
+    document.getElementById("app").classList.add("hidden");
+    document.getElementById("loginPage").classList.remove("hidden");
+    document.getElementById("menuPage").classList.remove("hidden");
+    document.getElementById("successPage").classList.add("hidden");
+    document.getElementById("checkoutPanel").classList.add("hidden");
+    document.getElementById("loginForm").reset();
+    document.getElementById("loginError").textContent = "";
+}
+
+// NOTIFICATIONS
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.style.display = "block";
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+        toast.style.display = "none";
+    }, 3000);
+}
+</script>
+
+</body>
+</html>
